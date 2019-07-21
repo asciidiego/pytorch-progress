@@ -5,6 +5,8 @@ import torchvision.transforms as transforms
 import torch.optim as optim
 
 from model import net
+from imutils import imshow
+
 
 # Loading and normalizing CIFAR10
 transform = transforms.Compose(
@@ -25,12 +27,16 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=4,
 # Define classes
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
+# Move net to the GPU
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(f"Using {device} for doing the net calculations")
+
+net.to(device)
 
 # Define loss function and optimizer
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-
 
 # Train the network
 for epoch in range(2):  # loop over the dataset multiple times
@@ -38,7 +44,7 @@ for epoch in range(2):  # loop over the dataset multiple times
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
         # get the inputs; data is a list of [inputs, labels]
-        inputs, labels = data
+        inputs, labels = data[0].to(device), data[1].to(device)
 
         # zero the parameter gradients
         optimizer.zero_grad()
@@ -82,10 +88,11 @@ total = 0
 with torch.no_grad():
     for data in testloader:
         images, labels = data
-        outputs = net(images)
+        outputs = net(images.to(device))
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+        correct += (predicted == labels.to(device)).sum().item()
 
 print('Accuracy of the network on the 10000 test images: %d %%' % (
     100 * correct / total))
+
