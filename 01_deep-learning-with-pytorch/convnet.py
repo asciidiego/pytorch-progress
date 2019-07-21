@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
+import torch.optim as optim
 import torch.nn.functional as F
+import torchvision
+import torchvision.transforms as transforms
 
 class Net(nn.Module):
 
@@ -71,11 +74,10 @@ print('conv1.bias.grad after backward')
 print(net.conv1.bias.grad)
 
 # Manual weighting update
-# learning_rate = 0.01
+learning_rate = 0.01
 # for parameter in net.parameters():
 #     f.data.sub_(parameters * learning_rate)
 
-import torch.optim as optim
 
 # Own optimizer
 optimizer = optim.SGD(net.parameters(), lr=learning_rate)
@@ -86,3 +88,21 @@ optimizer = optim.SGD(net.parameters(), lr=learning_rate)
 # loss = criterion(net_output, target)
 # loss.backward()
 # optimizer.step()
+
+# Loading and normalizing CIFAR10
+transform = transforms.Compose(
+        [transforms.ToTensor(),
+         transforms.Normalize((.5, .5, .5), (.5, .5, .5))])
+# Train
+trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
+                                        download=True, transform=transform)
+
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
+                                          shuffle=True, num_workers=2)
+# Test
+testset = torchvision.datasets.CIFAR10(root='./data', train=False,
+                                        download=True, transform=transform)
+
+testloader = torch.utils.data.DataLoader(testset, batch_size=4,
+                                          shuffle=False, num_workers=2)
+
