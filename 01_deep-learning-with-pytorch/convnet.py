@@ -70,7 +70,7 @@ loss.backward()
 print('conv1.bias.grad after backward')
 print(net.conv1.bias.grad)
 
-# TODO: Learning rate
+# Manual weighting update
 # learning_rate = 0.01
 # for parameter in net.parameters():
 #     f.data.sub_(parameters * learning_rate)
