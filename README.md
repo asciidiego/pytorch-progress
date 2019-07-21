@@ -1,0 +1,5 @@
+# PyTorch Roadmap
+
+## Tutorials
+1. DEEP LEARNING WITH PYTORCH: A 60 MINUTE BLITZ [IN PROGRESS]
+
