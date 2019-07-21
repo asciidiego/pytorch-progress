@@ -70,3 +70,19 @@ loss.backward()
 print('conv1.bias.grad after backward')
 print(net.conv1.bias.grad)
 
+# TODO: Learning rate
+# learning_rate = 0.01
+# for parameter in net.parameters():
+#     f.data.sub_(parameters * learning_rate)
+
+import torch.optim as optim
+
+# Own optimizer
+optimizer = optim.SGD(net.parameters(), lr=learning_rate)
+
+# Inside the training loop we would do this.
+optimizer.zero_grad()
+output = net(input_data)
+loss = criterion(net_output, target)
+loss.backward()
+optimizer.step()
