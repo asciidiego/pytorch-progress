@@ -81,8 +81,8 @@ import torch.optim as optim
 optimizer = optim.SGD(net.parameters(), lr=learning_rate)
 
 # Inside the training loop we would do this.
-optimizer.zero_grad()
-output = net(input_data)
-loss = criterion(net_output, target)
-loss.backward()
-optimizer.step()
+# optimizer.zero_grad()
+# output = net(input_data)
+# loss = criterion(net_output, target)
+# loss.backward()
+# optimizer.step()
