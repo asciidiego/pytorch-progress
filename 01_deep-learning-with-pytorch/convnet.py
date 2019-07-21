@@ -58,7 +58,7 @@ loss = criterion(net_output, target)
 print(f"Loss function: {loss}")
 
 
-# TODO: Backpropagation
+# Backpropagation
 # Zeroes the gradient buffers of all parameters.
 net.zero_grad()
 
