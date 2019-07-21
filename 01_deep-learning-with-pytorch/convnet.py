@@ -40,4 +40,27 @@ class Net(nn.Module):
 net = Net()
 print(net)
 
+# TODO: Parameters
+net_parameters = list(net.parameters())
+print(f"Number of parameters of the net: {len(net_parameters)} ")
+
+# TODO: Forward pass
+input_data = torch.randn(1, 1, 32, 32)
+net_output = net(input_data)
+print(f"Output: {net_output}")
+
+# TODO: Loss function
+target = torch.randn(10)
+target = target.view(1, -1)  # Same shape as output
+criterion = nn.MSELoss()
+
+loss = criterion(net_output, target)
+print(f"Loss function: {loss}")
+
+
 # TODO: Backpropagation
+# Zeroes the gradient buffers of all parameters.
+net.zero_grad()
+
+print('conv1.bias.grad before backward')
+print(net.conv1.bias.grad)
