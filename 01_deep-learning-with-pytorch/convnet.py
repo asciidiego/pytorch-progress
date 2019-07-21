@@ -15,11 +15,14 @@ class Net(nn.Module):
         self.fc3 = nn.Linear(84, 10)  # 10 is the number of classes
     
     def forward(self, x):
+        print(f"Doing forward pass.")
+        print(f"{x.size()}")
         # Max-pooling over a two by two window
         x = F.max_pool2d(F.relu(self.conv1(x)), (2, 2))
         # If the size is a square, size can be input as a scalar
         x = F.max_pool2d(F.relu(self.conv2(x)), 2)
-        print(f"# flat features: {self.num_flat_features(x)}")
+        print(f"{x.size()}")
+        print(f"Number of flat features: {self.num_flat_features(x)}")
         x = x.view(-1, self.num_flat_features(x))
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
