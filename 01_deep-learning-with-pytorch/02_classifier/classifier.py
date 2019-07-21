@@ -12,6 +12,8 @@ from imutils import imshow
 transform = transforms.Compose(
         [transforms.ToTensor(),
          transforms.Normalize((.5, .5, .5), (.5, .5, .5))])
+
+# Dataloaders
 # Train
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
                                         download=True, transform=transform)
@@ -20,27 +22,27 @@ trainloader = torch.utils.data.DataLoader(trainset, batch_size=4,
                                           shuffle=True, num_workers=2)
 # Test
 testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                        download=True, transform=transform)
+                                       download=True, transform=transform)
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=4,
-                                          shuffle=False, num_workers=2)
-# Define classes
+                                         shuffle=False, num_workers=2)
+
+# Classes
 classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
+
+
 # Move net to the GPU
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+net.to(device)
 print(f"Using {device} for doing the net calculations")
 
-net.to(device)
-
 # Define loss function and optimizer
-
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
 # Train the network
 for epoch in range(2):  # loop over the dataset multiple times
-
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
         # get the inputs; data is a list of [inputs, labels]
@@ -68,10 +70,10 @@ print('Finished Training')
 dataiter = iter(testloader)
 images, labels = dataiter.next()
 
-# print images
+# Print images
 print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
-# print predictions
+# Print predictions
 outputs = net(images)
 _, predicted = torch.max(outputs, 1)
 
@@ -82,7 +84,7 @@ print('Predicted: ', ' '.join('%5s' % classes[predicted[j]]
 imshow(torchvision.utils.make_grid(images))
 
 
-# Assess
+# Network evalutation on the test set
 correct = 0
 total = 0
 with torch.no_grad():
@@ -95,4 +97,3 @@ with torch.no_grad():
 
 print('Accuracy of the network on the 10000 test images: %d %%' % (
     100 * correct / total))
-
